@@ -121,6 +121,8 @@
   .cat-scroll::-webkit-scrollbar { display: none; }
   .cat-tab { background: #f0f0f0; border: none; border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 700; color: #555; white-space: nowrap; cursor: pointer; transition: all .2s; flex-shrink: 0; }
   .cat-tab.active { background: #C62828; color: white; }
+  .cat-header { font-size: 13px; font-weight: 800; color: #C62828; text-transform: uppercase; letter-spacing: .04em; margin: 18px 0 6px; padding-bottom: 4px; border-bottom: 1px solid #f0f0f0; }
+  .cat-header:first-child { margin-top: 4px; }
   .item-card { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
   .item-thumb { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #f0f0f0; }
   .item-info { flex: 1; }
@@ -225,7 +227,7 @@
       <div class="mc-icon">📦</div><div class="mc-title">Escolher um Kit</div><div class="mc-sub">Combos prontos com desconto</div>
     </div>
     <div class="mode-card" onclick="state.mode='avulso';render()">
-      <div class="mc-icon">✏️</div><div class="mc-title">Montar meu Pedido</div><div class="mc-sub">Escolha item por item</div>
+      <div class="mc-icon">✏️</div><div class="mc-title">Veja os itens</div><div class="mc-sub">Escolha item por item</div>
     </div>
   </div>
   <div style="background:#f9f9f9;border-radius:12px;padding:12px 14px;">
@@ -330,6 +332,7 @@ const ITEMS = [
   {id:14, cat:'frangos',   name:'Estrogonofe de frango, arroz e batata rústica',                  price:16.99, info:'300g · 354Kcal'},
   {id:15, cat:'frangos',   name:'Filé de frango à parmegiana e arroz',                            price:17.49, info:'300g · 375Kcal'},
   {id:40, cat:'frangos',   name:'Frango desfiado com brócolis refogado',                          price:16.99, info:'300g · 215Kcal', fit:true},
+  {id:92, cat:'frangos',   name:'Yakissoba de Frango — Molho da Chefe',                        price:19.99, info:'300g · 420Kcal'},
   {id:16, cat:'massas',    name:'Lasanha tradicional molho pomodoro',                             price:18.99, info:'300g · 498Kcal'},
   {id:17, cat:'massas',    name:'Panqueca de carne, molho de tomate e mussarela',                 price:17.99, info:'300g · 366Kcal'},
   {id:18, cat:'massas',    name:'Panqueca de frango, molho branco e mussarela',                   price:17.99, info:'300g · 558Kcal'},
@@ -338,9 +341,9 @@ const ITEMS = [
   {id:21, cat:'massas',    name:'Fusili ao molho pesto, sour cream e tomate',                     price:17.99, info:'300g · 600Kcal'},
   {id:23, cat:'massas',    name:'Ravioli de carne ao molho de tomate e parmesão',                 price:17.99, info:'402Kcal'},
   {id:24, cat:'massas',    name:'Torta de Frango com palmito',                                   price:17.99, info:'300g'},
+  {id:93, cat:'massas',    name:'Yakissoba de Frango — Molho da Chefe',                        price:19.99, info:'300g · 420Kcal'},
   {id:28, cat:'novidades', name:'Salmão, macarrão penne, brócolis e tomate',                      price:22.90, info:'280g · 409Kcal', isNew:true},
   {id:29, cat:'novidades', name:'Salmão desfiado com arroz e brócolis',                           price:22.90, info:'300g · 385Kcal', isNew:true},
-  {id:50, cat:'novidades', name:'Yakissoba de Frango — Molho da Chefe',                           price:19.99, info:'300g · 420Kcal', isNew:true},
   {id:51, cat:'novidades', name:'Tilápia ao molho praiano, arroz com castanhas e batata',         price:20.90, info:'300g · 350Kcal', isNew:true},
   {id:60, cat:'sobremesas',name:'Pastel de Belém Creme de Baunilha (caixa 4un)',                  price:23.90, info:'Caixa com 4 unidades'},
   {id:61, cat:'sobremesas',name:'Pastel de Belém KITKAT (caixa 4un)',                             price:25.90, info:'Caixa com 4 unidades'},
@@ -371,19 +374,14 @@ const ITEMS = [
 
 const KITS = [
   {id:'k10a', badge:'Kit 10', name:'Conheça Nossos Sabores', qty:10, price:169.90, note:'1 de cada sabor',        items:[1,2,5,7,8,9,12,13,14,20]},
-  {id:'k14',  badge:'Kit 14', name:'Kit Sabores',            qty:14, price:229.90, note:'2 de cada sabor',        items:[1,2,7,8,9,13,14,20,12,5]},
   {id:'k10b', badge:'Kit 10', name:'Vida Leve Saborosa',     qty:10, price:169.00, note:'2 de cada (5 sabores)',  items:[1,7,9,10,14], badgeCls:'green'},
-  {id:'k20',  badge:'Kit 20', name:'Dupla de Sabores',       qty:20, price:319.90, note:'2 de cada (10 sabores)', items:[1,2,3,5,7,8,9,11,13,14]},
-  {id:'k30',  badge:'Kit 30', name:'Família',                qty:30, price:459.90, note:'2 de cada (15 sabores)', items:[1,2,3,5,6,7,8,9,11,12,13,14,15,26,10]},
-  {id:'k40',  badge:'Kit 40', name:'Pacotão Família',        qty:40, price:599.90, note:'4 de cada (10 sabores)', items:[1,2,3,5,7,8,9,12,13,14], badgeCls:'gold'},
 ];
 
 const CATS = [
   {id:'carnes',    label:'🥩 Carnes'},
   {id:'frangos',   label:'🍗 Frangos'},
   {id:'massas',    label:'🍝 Massas'},
-  {id:'novidades', label:'🔥 Novidades'},
-  {id:'sobremesas',label:'🍮 Sobremesas'},
+  {id:'novidades', label:'🐟 Peixes'},
   {id:'paes_queijo',label:'🧀 Pães de Queijo'},
   {id:'salgados_fritar',label:'🍗 Salgados para Fritar'},
 ];
@@ -520,6 +518,15 @@ function renderItemCard(it) {
   </div>`;
 }
 
+/* ===================== LISTA DIRETA DE ITENS, AGRUPADA POR CATEGORIA ===================== */
+function renderItemsByCategory() {
+  return CATS.map(c => {
+    const catItems = ITEMS.filter(i => i.cat === c.id).map(renderItemCard).join('');
+    if (!catItems) return '';
+    return `<p class="cat-header">${c.label}</p>${catItems}`;
+  }).join('');
+}
+
 let state = {
   step:0, mode:null, kit:null, cart:{}, cat:'carnes',
   payment:null, delivery:null,
@@ -647,7 +654,7 @@ function renderStep0() {
       <div class="mc-icon">📦</div><div class="mc-title">Escolher um Kit</div><div class="mc-sub">Combos prontos com desconto</div>
     </div>
     <div class="mode-card${state.mode==='avulso'?' selected':''}" onclick="state.mode='avulso';render()">
-      <div class="mc-icon">✏️</div><div class="mc-title">Montar meu Pedido</div><div class="mc-sub">Escolha item por item</div>
+      <div class="mc-icon">✏️</div><div class="mc-title">Veja os itens</div><div class="mc-sub">Escolha item por item</div>
     </div>
   </div>
   <div style="background:#f9f9f9;border-radius:12px;padding:12px 14px;">
@@ -697,18 +704,13 @@ function renderStep1Kit() {
     <div class="mc-right">${fmt(avulsoSubtotal())}</div>
   </div>` : '';
 
-  const catTabs = CATS.map(c =>
-    `<button class="cat-tab${state.cat===c.id?' active':''}" onclick="setCat('${c.id}')">${c.label}</button>`
-  ).join('');
-
-  const items = ITEMS.filter(i => i.cat === state.cat).map(renderItemCard).join('');
+  const items = renderItemsByCategory();
 
   return kitCards + `
     <div style="margin-top:16px;border-top:2px dashed #f0f0f0;padding-top:16px;">
       <p style="font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">Adicionar itens avulsos <span style="font-weight:400;color:#888;font-size:12px;">(opcional)</span></p>
       <p style="font-size:12px;color:#888;margin-bottom:12px;">Adicione marmitas extras além do kit</p>
       ${cartBar}
-      <div class="cat-scroll">${catTabs}</div>
       ${items}
     </div>`;
 }
@@ -725,18 +727,14 @@ function renderStep1Avulso() {
     discBar = `<div class="disc-bar">✅ Desconto ${(vd*100).toFixed(0)}% ativado! (${q} itens)${prox}</div>`;
   } else discBar = `<div class="vol-info">💡 Mais ${14-q} iten${14-q>1?'s':''} para ativar desconto</div>`;
 
-  const catTabs = CATS.map(c =>
-    `<button class="cat-tab${state.cat===c.id?' active':''}" onclick="state.cat='${c.id}';render()">${c.label}</button>`
-  ).join('');
-
-  const items = ITEMS.filter(i => i.cat === state.cat).map(renderItemCard).join('');
+  const items = renderItemsByCategory();
 
   const cartBar = q > 0 ? `<div class="mini-cart">
     <div class="mc-left"><b>${q}</b> iten${q>1?'s':''} no carrinho</div>
     <div class="mc-right">${fmt(subtotal())}</div>
   </div>` : '';
 
-  return discBar + `<div class="cat-scroll">${catTabs}</div>` + cartBar + items;
+  return discBar + cartBar + items;
 }
 
 function renderStep2() {
